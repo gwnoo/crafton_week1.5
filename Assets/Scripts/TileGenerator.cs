@@ -174,7 +174,7 @@ public class TileGenerator : MonoBehaviour
             case 11:
                 newType = 15; // ¦«¸ð¾ç 1111
                 ChangeColor(Colors.WHITE, childList[2], childList[4], childList[5], childList[6], childList[8]);
-                ChangeColor(Colors.YELLOW, childList[1], childList[3], childList[7], childList[9]);
+                ChangeColor(Colors.BLUE, childList[1], childList[3], childList[7], childList[9]);
                 break;
             default:
                 newType = 0;

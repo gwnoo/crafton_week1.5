@@ -24,6 +24,7 @@ public class BoardSlot : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
         GameObject tile = slot.transform.GetChild(0).gameObject;
         tile.transform.SetParent(transform);
         tile.GetComponent<RectTransform>().position = rect.position;
+        //tile.GetComponent<RectTransform>().sizeDelta = rect.sizeDelta;
 
         int type = tile.GetComponent<TileDraggable>().tileType;
         BoardCheck.adj[idx / 5 + 1, idx % 5 + 1] = type;
