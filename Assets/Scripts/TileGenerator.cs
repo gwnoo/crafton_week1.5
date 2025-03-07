@@ -28,6 +28,10 @@ public class TileGenerator : MonoBehaviour
     {
         RerollToggle.onValueChanged.AddListener(Reroll);
         RerollCount = 3;
+        tileCount = 1;
+        TileGenerate(InventorySlot1);
+        TileGenerate(InventorySlot2);
+        TileGenerate(InventorySlot3);
     }
 
     private void Update()
@@ -49,8 +53,6 @@ public class TileGenerator : MonoBehaviour
             RerollCount--;
 
             DeleteTile(InventorySlot1);
-            DeleteTile(InventorySlot2);
-            DeleteTile(InventorySlot3);
 
             Generate();
 
@@ -62,8 +64,6 @@ public class TileGenerator : MonoBehaviour
             RerollCount--;
 
             DeleteTile(InventorySlot1);
-            DeleteTile(InventorySlot2);
-            DeleteTile(InventorySlot3);
 
             Generate();
         }
@@ -90,11 +90,11 @@ public class TileGenerator : MonoBehaviour
         tileCount -= 1;
     }
 
-    private void Generate()
+    public void Generate()
     {
-        tileCount = 3;
-        TileGenerate(InventorySlot1);
-        TileGenerate(InventorySlot2);
+        tileCount = 1;
+        MoveTile(InventorySlot1, InventorySlot2);
+        MoveTile(InventorySlot2, InventorySlot3);
         TileGenerate(InventorySlot3);
     }
 
@@ -282,5 +282,18 @@ public class TileGenerator : MonoBehaviour
         newTile.GetComponent<TileDraggable>().tileType = type;
         tileDraggable = newTile.GetComponent<TileDraggable>();
         tileDraggable.enabled = false;
+    }
+
+    private void MoveTile(Transform slot1, Transform slot2)
+    {
+        GameObject tile;
+
+        if (slot2.childCount > 0)
+        {
+            tile = slot2.GetChild(0).gameObject;
+
+            tile.transform.SetParent(slot1);
+            tile.GetComponent<RectTransform>().position = slot1.gameObject.GetComponent<RectTransform>().position;
+        }
     }
 }
