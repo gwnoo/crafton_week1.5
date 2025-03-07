@@ -227,52 +227,52 @@ public class TileGenerator : MonoBehaviour
         {
             case 10:
                 // ─모양
-                ChangeColor(Colors.BLUE, childList[4], childList[5], childList[6]);
+                ChangeColor(Colors.YELLOW, childList[4], childList[5], childList[6]);
                 break;
             case 5:
                 // │모양
-                ChangeColor(Colors.BLUE, childList[2], childList[5], childList[8]);
+                ChangeColor(Colors.YELLOW, childList[2], childList[5], childList[8]);
                 break;
             case 6:
                 // ┌모양
-                ChangeColor(Colors.BLUE, childList[5], childList[6], childList[8]);
+                ChangeColor(Colors.YELLOW, childList[5], childList[6], childList[8]);
                 break;
             case 12:
                 // ┐모양
-                ChangeColor(Colors.BLUE, childList[4], childList[5], childList[8]);
+                ChangeColor(Colors.YELLOW, childList[4], childList[5], childList[8]);
                 break;
             case 9:
                 // ┘모양
-                ChangeColor(Colors.BLUE, childList[2], childList[4], childList[5]);
+                ChangeColor(Colors.YELLOW, childList[2], childList[4], childList[5]);
                 break;
             case 3:
                 // └모양
-                ChangeColor(Colors.BLUE, childList[2], childList[5], childList[6]);
+                ChangeColor(Colors.YELLOW, childList[2], childList[5], childList[6]);
                 break;
             case 7:
                 // ┬모양 0111
-                ChangeColor(Colors.BLUE, childList[2], childList[5], childList[6], childList[8]);
+                ChangeColor(Colors.YELLOW, childList[2], childList[5], childList[6], childList[8]);
                 ChangeColor(Colors.MAGENTA, childList[1], childList[3], childList[4], childList[7], childList[9]);
                 break;
             case 11:
                 // ┤모양 1011
-                ChangeColor(Colors.BLUE, childList[2], childList[4], childList[5], childList[6]);
+                ChangeColor(Colors.YELLOW, childList[2], childList[4], childList[5], childList[6]);
                 ChangeColor(Colors.MAGENTA, childList[1], childList[3], childList[7], childList[8], childList[9]);
                 break;
             case 14:
                 // ┴모양 1110
-                ChangeColor(Colors.BLUE, childList[4], childList[5], childList[6], childList[8]);
+                ChangeColor(Colors.YELLOW, childList[4], childList[5], childList[6], childList[8]);
                 ChangeColor(Colors.MAGENTA, childList[1], childList[2], childList[3], childList[7], childList[9]);
                 break;
             case 13:
                 // ├모양 1101
-                ChangeColor(Colors.BLUE, childList[2], childList[4], childList[5], childList[8]);
+                ChangeColor(Colors.YELLOW, childList[2], childList[4], childList[5], childList[8]);
                 ChangeColor(Colors.MAGENTA, childList[1], childList[3], childList[6], childList[7], childList[9]);
                 break;
             case 15:
                 // ┼모양 1111
-                ChangeColor(Colors.BLUE, childList[2], childList[4], childList[5], childList[6], childList[8]);
-                ChangeColor(Colors.YELLOW, childList[1], childList[3], childList[7], childList[9]);
+                ChangeColor(Colors.YELLOW, childList[2], childList[4], childList[5], childList[6], childList[8]);
+                ChangeColor(Colors.BLUE, childList[1], childList[3], childList[7], childList[9]);
                 break;
             default:
                 type = 0;
