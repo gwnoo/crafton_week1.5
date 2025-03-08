@@ -28,7 +28,7 @@ public class TileGenerator : MonoBehaviour
     {
         RerollToggle.onValueChanged.AddListener(Reroll);
         RerollCount = 3;
-        tileCount = 1;
+        tileCount = 3;
         TileGenerate(InventorySlot1);
         TileGenerate(InventorySlot2);
         TileGenerate(InventorySlot3);
@@ -53,6 +53,8 @@ public class TileGenerator : MonoBehaviour
             RerollCount--;
 
             DeleteTile(InventorySlot1);
+            DeleteTile(InventorySlot2);
+            DeleteTile(InventorySlot3);
 
             Generate();
 
@@ -64,9 +66,12 @@ public class TileGenerator : MonoBehaviour
             RerollCount--;
 
             DeleteTile(InventorySlot1);
+            DeleteTile(InventorySlot2);
+            DeleteTile(InventorySlot3);
 
             Generate();
         }
+    
     }
 
 
@@ -90,11 +95,11 @@ public class TileGenerator : MonoBehaviour
         tileCount -= 1;
     }
 
-    public void Generate()
+    private void Generate()
     {
-        tileCount = 1;
-        MoveTile(InventorySlot1, InventorySlot2);
-        MoveTile(InventorySlot2, InventorySlot3);
+        tileCount = 3;
+        TileGenerate(InventorySlot1);
+        TileGenerate(InventorySlot2);
         TileGenerate(InventorySlot3);
     }
 

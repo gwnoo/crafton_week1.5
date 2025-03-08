@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BoardSlot : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler, IPointerClickHandler
+public class BoardSlot : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPointerExitHandler//, IPointerClickHandler
 {
     private Image image;
     private RectTransform rect;
@@ -19,7 +19,7 @@ public class BoardSlot : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
         tileGenerator = GameObject.Find("TileGenerator");
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    /*public void OnPointerClick(PointerEventData eventData)
     {
         GameObject tile = slot.transform.GetChild(0).gameObject;
         tile.transform.SetParent(transform);
@@ -34,7 +34,7 @@ public class BoardSlot : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
         tileGenerator.GetComponent<BoardCheck>().Check();
 
         SoundManager.Instance.PlayDisplaySound();
-    }
+    }*/
 
     public void OnPointerEnter(PointerEventData eventData)
     {
