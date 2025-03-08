@@ -31,7 +31,7 @@ public class BoardCheck : MonoBehaviour
         adj = new int[7, 7] { { 0, 4, 4, 4, 4, 4, 0 }, { 2, 0, 0, 0, 0, 0, 8 }, { 2, 0, 0, 0, 0, 0, 8 }, { 2, 0, 0, 0, 0, 0, 8 }, { 2, 0, 0, 0, 0, 0, 8 }, { 2, 0, 0, 0, 0, 0, 8 }, { 0, 1, 1, 1, 1, 1, 0 } };
         gameover = false;
         score = 0;
-        scoreTxt.text = "Score : " + score;
+        scoreTxt.text = "" + score;
         GameObject boardInventory = GameObject.Find("BoardInventory");
         for (int i = 0; i < 25; i++)
         {
@@ -119,7 +119,7 @@ public class BoardCheck : MonoBehaviour
             gameOverTxt.text = "Your Score is " + score;
         }
 
-        scoreTxt.text = "Score : " + score;
+        scoreTxt.text = "" + score;
     }
 
     private void UfMerge(int a, int b)
@@ -167,6 +167,7 @@ public class BoardCheck : MonoBehaviour
                 }
             }
         }
+
 
         // 점수 계산 : 배율 정해서. 이부분은 쉽게 수정되게. 배율변수 빼기.
         displayedTileCount -= len;

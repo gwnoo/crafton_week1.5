@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class TurnCounting : MonoBehaviour
 {
@@ -15,6 +17,12 @@ public class TurnCounting : MonoBehaviour
     public int goalScore;
     private int firstGoalScore;
     private int increaseMultiplier = 2;
+    private GameObject bossHpBar;
+    private GameObject hpBar;
+    private GameObject monsterSpawner;
+    private GameObject boardInventory;
+    private int lastBoss;
+    private bool isMonsterAlive;
 
     private int level = 1;
 
@@ -37,6 +45,10 @@ public class TurnCounting : MonoBehaviour
 
         firstLimitTurn = limitTurn;
         firstGoalScore = goalScore;
+        bossHpBar = GameObject.Find("BossHpBar");
+        hpBar = GameObject.Find("HpBar");
+        monsterSpawner = GameObject.Find("MonsterManager");
+
         UpdateText();
     }
 
@@ -65,6 +77,12 @@ public class TurnCounting : MonoBehaviour
         limitTurn = firstLimitTurn;
         goalScore = firstGoalScore;
         increaseMultiplier = 2;
+        bossHpBar = GameObject.Find("BossHpBar");
+        hpBar = GameObject.Find("HpBar");
+        monsterSpawner = GameObject.Find("MonsterManager");
+        boardInventory = GameObject.Find("BoardInventory");
+        lastBoss = 0;
+        isMonsterAlive = true;
     }
 
     private void AssignUIElements()
@@ -76,7 +94,7 @@ public class TurnCounting : MonoBehaviour
     public void CheckTrunAndGoal()
     {
         UpdateText();
-
+        
         if (turnCount >= limitTurn)
         {
             if(BoardCheck.score < goalScore)
@@ -88,6 +106,7 @@ public class TurnCounting : MonoBehaviour
             {
                 //°»½Å
                 limitTurn += firstLimitTurn;
+                lastBoss += goalScore;
                 goalScore += firstGoalScore * increaseMultiplier;
                 if (increaseMultiplier < 30)
                 {
@@ -97,6 +116,9 @@ public class TurnCounting : MonoBehaviour
                 levelUpEffect.CrackerShoot(level);
                 level++;
                 SoundManager.Instance.PlayLevelUpSound();
+
+                
+
             }
         }
     }
@@ -106,5 +128,36 @@ public class TurnCounting : MonoBehaviour
     {
         limitTurnText.text = "Turn : " + turnCount + " / " + limitTurn;
         goalScoreText.text = "Goal : " + goalScore;
+        if(BoardCheck.score >= goalScore)
+        {
+            /*if(isMonsterAlive == true)
+            {
+                boardInventory.transform.Translate(178, 0, 0);
+            }*/
+            if (monsterSpawner.GetComponent<MonsterSpawner>().CheckMonster())
+            {
+                monsterSpawner.GetComponent<MonsterSpawner>().KillMonster();
+            }
+            bossHpBar.SetActive(false);
+            hpBar.SetActive(false);
+            isMonsterAlive = false;
+        }
+        else
+        {
+            /*if(isMonsterAlive == false)
+            {
+                boardInventory.transform.Translate(-178, 0, 0);
+            }*/
+
+            monsterSpawner.GetComponent<MonsterSpawner>().SpawnMonster();
+            bossHpBar.SetActive(true);
+            hpBar.SetActive(true);
+            isMonsterAlive = true;
+            
+            bossHpBar.GetComponent<HpBarControll>().SetHp(goalScore - BoardCheck.score, goalScore - lastBoss);
+            hpBar.GetComponent<HpBarControll>().SetHp(limitTurn - turnCount, firstLimitTurn);
+        }
+            
+
     }
 }
