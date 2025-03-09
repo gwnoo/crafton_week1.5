@@ -11,7 +11,7 @@ public class MonsterSpawner : MonoBehaviour
     [SerializeField]
     private GameObject hpBar;
     private int aliveMonster = -1;
-    private int nextMonster = 2;
+    private int nextMonster = 0;
 
     
 
