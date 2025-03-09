@@ -12,10 +12,7 @@ public class MonsterSpawner : MonoBehaviour
     private GameObject hpBar;
     private int aliveMonster = -1;
 
-    private void Awake()
-    {
-        SpawnMonsterByLevel();
-    }
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public bool CheckMonster()
@@ -58,20 +55,19 @@ public class MonsterSpawner : MonoBehaviour
     public void UpdateMonster()
     {
         int goalScore = TurnCounting.Instance.goalScore;
-        int lastBoss = TurnCounting.Instance.lastBoss;
         int limitTurn = TurnCounting.Instance.limitTurn;
         int turnCount = TurnCounting.Instance.turnCount;
-        int firstLimitTurn = TurnCounting.Instance.firstLimitTurn;
         int turnScore = TurnCounting.Instance.turnScore;
         if (turnScore >= goalScore)
         {
             KillMonster();
             bossHpBar.SetActive(false);
             hpBar.SetActive(false);
+            TurnCounting.Instance.turnCount = limitTurn;
         }
         else
         {
-            if(monsterType == -1)
+            if(aliveMonster == -1)
             {
                 SpawnMonsterByLevel();
             }
@@ -79,7 +75,7 @@ public class MonsterSpawner : MonoBehaviour
             hpBar.SetActive(true);
 
             bossHpBar.GetComponent<HpBarControll>().SetHp(goalScore - turnScore, goalScore);
-            hpBar.GetComponent<HpBarControll>().SetHp(limitTurn - turnCount, firstLimitTurn);
+            hpBar.GetComponent<HpBarControll>().SetHp(limitTurn - turnCount, limitTurn);
         }
     }
 }

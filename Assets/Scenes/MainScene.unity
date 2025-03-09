@@ -547,7 +547,6 @@ MonoBehaviour:
   firstLimitTurn: 0
   goalScore: 50
   turnScore: 0
-  lastBoss: 0
   limitTurnText: {fileID: 821752492}
   goalScoreText: {fileID: 1471225003}
 --- !u!4 &318467075
@@ -2443,7 +2442,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -107, y: -891}
+  m_AnchoredPosition: {x: 744, y: -895}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &821752491
@@ -3932,7 +3931,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -110, y: -997}
+  m_AnchoredPosition: {x: 741, y: -1001}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!1 &1480047452 stripped
