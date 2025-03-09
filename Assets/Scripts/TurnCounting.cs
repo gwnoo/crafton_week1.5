@@ -13,16 +13,13 @@ public class TurnCounting : MonoBehaviour
     LevelUpEffect levelUpEffect;
     public int turnCount;
     public int limitTurn;
-    private int firstLimitTurn;
+    public int firstLimitTurn;
     public int goalScore;
+    public int turnScore;
     private int firstGoalScore;
     private int increaseMultiplier = 2;
-    private GameObject bossHpBar;
-    private GameObject hpBar;
-    private GameObject monsterSpawner;
-    private GameObject boardInventory;
-    private int lastBoss;
-    private bool isMonsterAlive;
+    public int lastBoss;
+    private GameObject monsterManager;
 
     private int level = 1;
 
@@ -45,11 +42,10 @@ public class TurnCounting : MonoBehaviour
 
         firstLimitTurn = limitTurn;
         firstGoalScore = goalScore;
-        bossHpBar = GameObject.Find("BossHpBar");
-        hpBar = GameObject.Find("HpBar");
-        monsterSpawner = GameObject.Find("MonsterManager");
+        turnScore = 0;
 
-        UpdateText();
+        monsterManager = GameObject.Find("MonsterManager");
+        UpdateScene();
     }
 
     // testcode
@@ -66,7 +62,7 @@ public class TurnCounting : MonoBehaviour
     {
         AssignUIElements(); // 텍스트누락방지 요소 할당
         ResetVariables(); // 변수를 기본값으로 초기화
-        UpdateText();
+        UpdateScene();
     }
 
     // 변수 초기화 메서드
@@ -76,13 +72,10 @@ public class TurnCounting : MonoBehaviour
         level = 1;
         limitTurn = firstLimitTurn;
         goalScore = firstGoalScore;
+        turnScore = 0;
         increaseMultiplier = 2;
-        bossHpBar = GameObject.Find("BossHpBar");
-        hpBar = GameObject.Find("HpBar");
-        monsterSpawner = GameObject.Find("MonsterManager");
-        boardInventory = GameObject.Find("BoardInventory");
         lastBoss = 0;
-        isMonsterAlive = true;
+        monsterManager = GameObject.Find("MonsterManager");
     }
 
     private void AssignUIElements()
@@ -91,13 +84,13 @@ public class TurnCounting : MonoBehaviour
         goalScoreText = GameObject.Find("GoalText")?.GetComponent<TextMeshProUGUI>();
     }
 
-    public void CheckTrunAndGoal()
+    public void CheckTurnAndGoal()
     {
-        UpdateText();
+        UpdateScene();
         
         if (turnCount >= limitTurn)
         {
-            if(BoardCheck.score < goalScore)
+            if(turnScore < goalScore)
             {
                 //game over
                 BoardCheck.gameover = true;
@@ -107,7 +100,8 @@ public class TurnCounting : MonoBehaviour
                 //갱신
                 limitTurn += firstLimitTurn;
                 lastBoss += goalScore;
-                goalScore += firstGoalScore * increaseMultiplier;
+                goalScore = firstGoalScore * increaseMultiplier;
+                turnScore = 0;
                 if (increaseMultiplier < 30)
                 {
                     increaseMultiplier += 1;
@@ -124,40 +118,11 @@ public class TurnCounting : MonoBehaviour
     }
 
     //텍스트 갱신
-    private void UpdateText()
+    private void UpdateScene()
     {
+        monsterManager.GetComponent<MonsterSpawner>().UpdateMonster();
         limitTurnText.text = "Turn : " + turnCount + " / " + limitTurn;
         goalScoreText.text = "Goal : " + goalScore;
-        if(BoardCheck.score >= goalScore)
-        {
-            /*if(isMonsterAlive == true)
-            {
-                boardInventory.transform.Translate(178, 0, 0);
-            }*/
-            if (monsterSpawner.GetComponent<MonsterSpawner>().CheckMonster())
-            {
-                monsterSpawner.GetComponent<MonsterSpawner>().KillMonster();
-            }
-            bossHpBar.SetActive(false);
-            hpBar.SetActive(false);
-            isMonsterAlive = false;
-        }
-        else
-        {
-            /*if(isMonsterAlive == false)
-            {
-                boardInventory.transform.Translate(-178, 0, 0);
-            }*/
-
-            monsterSpawner.GetComponent<MonsterSpawner>().SpawnMonster();
-            bossHpBar.SetActive(true);
-            hpBar.SetActive(true);
-            isMonsterAlive = true;
-            
-            bossHpBar.GetComponent<HpBarControll>().SetHp(goalScore - BoardCheck.score, goalScore - lastBoss);
-            hpBar.GetComponent<HpBarControll>().SetHp(limitTurn - turnCount, firstLimitTurn);
-        }
-            
 
     }
 }

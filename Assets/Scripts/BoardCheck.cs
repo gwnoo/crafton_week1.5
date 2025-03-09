@@ -106,7 +106,7 @@ public class BoardCheck : MonoBehaviour
         //턴 증가
         TurnCounting.Instance.turnCount++;
         //턴에 해당하는 점수 충족 여부 확인 및 게임 종료 결정
-        TurnCounting.Instance.CheckTrunAndGoal();
+        TurnCounting.Instance.CheckTurnAndGoal();
 
         if (displayedTileCount >= 25) // gameover
         {
@@ -172,6 +172,7 @@ public class BoardCheck : MonoBehaviour
         // 점수 계산 : 배율 정해서. 이부분은 쉽게 수정되게. 배율변수 빼기.
         displayedTileCount -= len;
         score += len * len * len;
+        TurnCounting.Instance.turnScore += len * len * len;
     }
 
     private void DestroyTile(int y, int x)
