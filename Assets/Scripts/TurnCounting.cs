@@ -16,6 +16,7 @@ public class TurnCounting : MonoBehaviour
     public int firstLimitTurn;
     public int goalScore;
     public int turnScore;
+    public int breakTurn;
     private int firstGoalScore;
     private int increaseMultiplier = 2;
     private GameObject monsterManager;
@@ -73,6 +74,7 @@ public class TurnCounting : MonoBehaviour
         goalScore = firstGoalScore;
         turnScore = 0;
         increaseMultiplier = 2;
+        breakTurn = 0;
         monsterManager = GameObject.Find("MonsterManager");
     }
 
@@ -100,6 +102,7 @@ public class TurnCounting : MonoBehaviour
                 turnCount = 0;
                 goalScore = firstGoalScore * increaseMultiplier;
                 turnScore = 0;
+                breakTurn = 5;
                 if (increaseMultiplier < 30)
                 {
                     increaseMultiplier += 1;
@@ -108,6 +111,12 @@ public class TurnCounting : MonoBehaviour
                 levelUpEffect.CrackerShoot(level);
                 level++;
                 SoundManager.Instance.PlayLevelUpSound();
+            }
+
+            if (monsterManager.GetComponent<MonsterSpawner>().CheckNextMonster() == 1)
+            {
+                limitTurn *= 2;
+                goalScore *= 10;
             }
         }
     }

@@ -21,6 +21,7 @@ public class BoardCheck : MonoBehaviour
     public int displayedTileCount = 0;
     private int[] uf = new int[49];
     private GameObject tileGenerator;
+    private GameObject monsterManager;
 
     private int[] checkNum = new int[] { 1, 2, 3, 4, 5, 7, 13, 14, 20, 21, 27, 28, 34, 35, 41, 43, 44, 45, 46, 47 };
 
@@ -38,6 +39,7 @@ public class BoardCheck : MonoBehaviour
             boardSlot[i] = boardInventory.transform.GetChild(i).gameObject;
         }
         tileGenerator = GameObject.Find("TileGenerator");
+        monsterManager = GameObject.Find("MonsterManager");
     }
 
     public void Check()
@@ -103,10 +105,17 @@ public class BoardCheck : MonoBehaviour
             }
         }
 
-        //턴 증가
-        TurnCounting.Instance.turnCount++;
-        //턴에 해당하는 점수 충족 여부 확인 및 게임 종료 결정
-        TurnCounting.Instance.CheckTurnAndGoal();
+        if(TurnCounting.Instance.breakTurn > 0)
+        {
+            TurnCounting.Instance.breakTurn--;
+        }
+        else
+        {
+            //턴 증가
+            TurnCounting.Instance.turnCount++;
+            //턴에 해당하는 점수 충족 여부 확인 및 게임 종료 결정
+            TurnCounting.Instance.CheckTurnAndGoal();
+        }
 
         if (displayedTileCount >= 25) // gameover
         {
@@ -168,11 +177,19 @@ public class BoardCheck : MonoBehaviour
             }
         }
 
+        if(monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 2 &&  (len == 1 || len == 2))
+        {
+            TurnCounting.Instance.turnCount += TurnCounting.Instance.limitTurn / 3;
+        }
+        else
+        {
+            // 점수 계산 : 배율 정해서. 이부분은 쉽게 수정되게. 배율변수 빼기.
+            displayedTileCount -= len;
+            score += len * len * len;
+            TurnCounting.Instance.turnScore += len * len * len;
 
-        // 점수 계산 : 배율 정해서. 이부분은 쉽게 수정되게. 배율변수 빼기.
-        displayedTileCount -= len;
-        score += len * len * len;
-        TurnCounting.Instance.turnScore += len * len * len;
+        }
+            
     }
 
     private void DestroyTile(int y, int x)

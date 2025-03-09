@@ -11,21 +11,18 @@ public class MonsterSpawner : MonoBehaviour
     [SerializeField]
     private GameObject hpBar;
     private int aliveMonster = -1;
+    private int nextMonster = 2;
 
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public bool CheckMonster()
+    public int CheckMonster()
     {
-        bool isAlive = false;
-        foreach (GameObject mon in monster)
-        {
-            if(mon.activeSelf)
-            {
-                isAlive = true;
-            }
-        }
-        return isAlive;
+        return aliveMonster;
+    }
+    public int CheckNextMonster()
+    {
+        return nextMonster;
     }
 
     public void SpawnMonster(int type)
@@ -40,16 +37,25 @@ public class MonsterSpawner : MonoBehaviour
             if(alive.activeSelf)
             {
                 alive.SetActive(false);
+                if(aliveMonster == 1)
+                {
+                    TurnCounting.Instance.limitTurn /= 2;
+                    TurnCounting.Instance.goalScore /= 10;
+                }
             }
         }
         aliveMonster = -1;
+        nextMonster = Random.Range(0, 4);
     }
 
     public void SpawnMonsterByLevel()
     {
-        monsterType = Random.Range(0, 4);
-        SpawnMonster(monsterType);
-        aliveMonster = monsterType;
+        SpawnMonster(nextMonster);
+        if (aliveMonster == 3)
+        {
+            aliveMonster = Random.Range(0, 3);
+        }
+        aliveMonster = nextMonster;
     }
 
     public void UpdateMonster()

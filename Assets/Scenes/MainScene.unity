@@ -547,6 +547,7 @@ MonoBehaviour:
   firstLimitTurn: 0
   goalScore: 50
   turnScore: 0
+  breakTurn: 0
   limitTurnText: {fileID: 821752492}
   goalScoreText: {fileID: 1471225003}
 --- !u!4 &318467075
@@ -4187,9 +4188,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monster:
   - {fileID: 2036734485}
-  - {fileID: 1923359392}
   - {fileID: 1561643514}
   - {fileID: 5243060750163576522}
+  - {fileID: 1923359392}
   bossHpBar: {fileID: 380210263}
   hpBar: {fileID: 2085950640}
 --- !u!4 &1543898118
@@ -5380,7 +5381,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -31, y: -21}
+  m_AnchoredPosition: {x: -62, y: -933}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1908813641
