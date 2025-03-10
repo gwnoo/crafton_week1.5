@@ -17,6 +17,8 @@ public class TurnCounting : MonoBehaviour
     public int goalScore;
     public int turnScore;
     public int breakTurn;
+    public int lastbossTrigger;
+    public int bossTrigger;
     private int firstGoalScore;
     private int increaseMultiplier = 2;
     private GameObject monsterManager;
@@ -75,6 +77,8 @@ public class TurnCounting : MonoBehaviour
         turnScore = 0;
         increaseMultiplier = 2;
         breakTurn = 0;
+        bossTrigger = 0;
+        lastbossTrigger = 0;
         monsterManager = GameObject.Find("MonsterManager");
     }
 
@@ -102,7 +106,7 @@ public class TurnCounting : MonoBehaviour
                 turnCount = 0;
                 goalScore = firstGoalScore * increaseMultiplier;
                 turnScore = 0;
-                breakTurn = Random.Range(2, 7);
+                breakTurn = Random.Range(3, 7);
                 if (increaseMultiplier < 30)
                 {
                     increaseMultiplier += 1;
@@ -122,7 +126,7 @@ public class TurnCounting : MonoBehaviour
     }
 
     //텍스트 갱신
-    private void UpdateScene()
+    public void UpdateScene()
     {
         monsterManager.GetComponent<MonsterSpawner>().UpdateMonster();
         limitTurnText.text = "Turn : " + turnCount + " / " + limitTurn;

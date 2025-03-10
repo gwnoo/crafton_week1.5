@@ -27,7 +27,7 @@ public class TileGenerator : MonoBehaviour
     private void Start()
     {
         RerollToggle.onValueChanged.AddListener(Reroll);
-        RerollCount = 30000000;
+        RerollCount = 3;
         tileCount = 3;
         TileGenerate(InventorySlot1);
         TileGenerate(InventorySlot2);
@@ -46,6 +46,12 @@ public class TileGenerator : MonoBehaviour
         if (RerollCount == 0)
         {
             SoundManager.Instance.PlayForbidSound();
+
+            DeleteTile(InventorySlot1);
+            DeleteTile(InventorySlot2);
+            DeleteTile(InventorySlot3);
+
+            Generate();
         }
         else if (RerollCount == 1)
         {
@@ -288,6 +294,8 @@ public class TileGenerator : MonoBehaviour
         tileDraggable = newTile.GetComponent<TileDraggable>();
         tileDraggable.enabled = false;
     }
+
+
 
     private void MoveTile(Transform slot1, Transform slot2)
     {
