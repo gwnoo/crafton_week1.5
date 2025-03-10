@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System;
 using System.Reflection.Emit;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class BoardCheck : MonoBehaviour
 {
@@ -18,11 +19,16 @@ public class BoardCheck : MonoBehaviour
     private TextMeshProUGUI gameOverTxt;
     public static int score = 0;
     public static bool gameover = false;
+    public static bool gameclear = false;
     public int displayedTileCount = 0;
     private int[] uf = new int[49];
     private GameObject tileGenerator;
+    private GameObject monsterManager;
+    private GameObject boardInventory;
+    private UnityEngine.UI.Image image;
 
     private int[] checkNum = new int[] { 1, 2, 3, 4, 5, 7, 13, 14, 20, 21, 27, 28, 34, 35, 41, 43, 44, 45, 46, 47 };
+    private int[] bossCheck = new int[] {0, 0, 0, 0, 0};
 
     public static int[,] adj = new int[7, 7];
 
@@ -31,13 +37,14 @@ public class BoardCheck : MonoBehaviour
         adj = new int[7, 7] { { 0, 4, 4, 4, 4, 4, 0 }, { 2, 0, 0, 0, 0, 0, 8 }, { 2, 0, 0, 0, 0, 0, 8 }, { 2, 0, 0, 0, 0, 0, 8 }, { 2, 0, 0, 0, 0, 0, 8 }, { 2, 0, 0, 0, 0, 0, 8 }, { 0, 1, 1, 1, 1, 1, 0 } };
         gameover = false;
         score = 0;
-        scoreTxt.text = "Score : " + score;
-        GameObject boardInventory = GameObject.Find("BoardInventory");
+        scoreTxt.text = "" + score;
+        boardInventory = GameObject.Find("BoardInventory");
         for (int i = 0; i < 25; i++)
         {
             boardSlot[i] = boardInventory.transform.GetChild(i).gameObject;
         }
         tileGenerator = GameObject.Find("TileGenerator");
+        monsterManager = GameObject.Find("MonsterManager");
     }
 
     public void Check()
@@ -70,7 +77,7 @@ public class BoardCheck : MonoBehaviour
         }
 
         // 연결 확인
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
         {
             for(int j = 0; j < 7; j++)
             {
@@ -103,10 +110,49 @@ public class BoardCheck : MonoBehaviour
             }
         }
 
-        //턴 증가
-        TurnCounting.Instance.turnCount++;
-        //턴에 해당하는 점수 충족 여부 확인 및 게임 종료 결정
-        TurnCounting.Instance.CheckTrunAndGoal();
+        if(TurnCounting.Instance.breakTurn > 0)
+        {
+            if(TurnCounting.Instance.breakTurn == 3 && (TurnCounting.Instance.bossTrigger != TurnCounting.Instance.lastbossTrigger))
+            {
+                if (TurnCounting.Instance.bossTrigger == 5)
+                {
+                    monsterManager.GetComponent<MonsterSpawner>().UpdateBoss();
+                }
+                else
+                {
+                    monsterManager.GetComponent<MonsterSpawner>().StartBossScene(TurnCounting.Instance.bossTrigger);
+                }
+
+            }
+            if (TurnCounting.Instance.breakTurn == 2 && (TurnCounting.Instance.bossTrigger != TurnCounting.Instance.lastbossTrigger))
+            {
+                if (TurnCounting.Instance.bossTrigger == 5)
+                {
+                    TurnCounting.Instance.breakTurn++;
+                    monsterManager.GetComponent<MonsterSpawner>().bossTurnCount++;
+                    monsterManager.GetComponent<MonsterSpawner>().UpdateBoss();
+                }
+                else
+                {
+                    monsterManager.GetComponent<MonsterSpawner>().EndBossScene();
+                    TurnCounting.Instance.lastbossTrigger = TurnCounting.Instance.bossTrigger;
+                }
+                
+            }
+
+            if (TurnCounting.Instance.breakTurn == 1)
+            {
+                TurnCounting.Instance.UpdateScene();
+            }
+            TurnCounting.Instance.breakTurn--;
+        }
+        else
+        {
+            //턴 증가
+            TurnCounting.Instance.turnCount++;
+            //턴에 해당하는 점수 충족 여부 확인 및 게임 종료 결정
+            TurnCounting.Instance.CheckTurnAndGoal();
+        }
 
         if (displayedTileCount >= 25) // gameover
         {
@@ -119,7 +165,15 @@ public class BoardCheck : MonoBehaviour
             gameOverTxt.text = "Your Score is " + score;
         }
 
-        scoreTxt.text = "Score : " + score;
+        if(gameclear)
+        {
+            image = boardInventory.GetComponent<UnityEngine.UI.Image>();
+            image.color = new Color32(200, 0, 0, 155);
+            score += 100000;
+            gameclear = false;
+        }
+
+        scoreTxt.text = "" + score;
     }
 
     private void UfMerge(int a, int b)
@@ -168,9 +222,39 @@ public class BoardCheck : MonoBehaviour
             }
         }
 
-        // 점수 계산 : 배율 정해서. 이부분은 쉽게 수정되게. 배율변수 빼기.
-        displayedTileCount -= len;
-        score += len * len * len;
+        if((monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 2 || (monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 3 && monsterManager.GetComponent<MonsterSpawner>().buckShotMode == 2)) &&  (len == 1 || len == 2))
+        {
+            TurnCounting.Instance.turnCount += TurnCounting.Instance.limitTurn / 3;
+        }
+        else
+        {
+            if(len >= 21 && bossCheck[len - 21] == 0)
+            {
+                TurnCounting.Instance.bossTrigger++;
+                bossCheck[len - 21] = 1;
+            }
+
+            // 점수 계산 : 배율 정해서. 이부분은 쉽게 수정되게. 배율변수 빼기.
+            displayedTileCount -= len;
+            score += len * len * len;
+
+            if (monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 8)
+            {
+                monsterManager.GetComponent<MonsterSpawner>().bossTurnScore += len * len * len;
+                if(len == 25)
+                {
+                    monsterManager.GetComponent<MonsterSpawner>().bossDeathTrigger = true;
+                }
+            }
+            else
+            {
+                TurnCounting.Instance.turnScore += len * len * len;
+            }
+                
+            
+
+        }
+            
     }
 
     private void DestroyTile(int y, int x)
@@ -196,4 +280,5 @@ public class BoardCheck : MonoBehaviour
             }
         }
     }
+
 }

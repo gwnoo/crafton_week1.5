@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class TurnCounting : MonoBehaviour
 {
@@ -11,10 +13,15 @@ public class TurnCounting : MonoBehaviour
     LevelUpEffect levelUpEffect;
     public int turnCount;
     public int limitTurn;
-    private int firstLimitTurn;
+    public int firstLimitTurn;
     public int goalScore;
+    public int turnScore;
+    public int breakTurn;
+    public int lastbossTrigger;
+    public int bossTrigger;
     private int firstGoalScore;
     private int increaseMultiplier = 2;
+    private GameObject monsterManager;
 
     private int level = 1;
 
@@ -37,7 +44,10 @@ public class TurnCounting : MonoBehaviour
 
         firstLimitTurn = limitTurn;
         firstGoalScore = goalScore;
-        UpdateText();
+        turnScore = 0;
+
+        monsterManager = GameObject.Find("MonsterManager");
+        UpdateScene();
     }
 
     // testcode
@@ -54,7 +64,7 @@ public class TurnCounting : MonoBehaviour
     {
         AssignUIElements(); // 텍스트누락방지 요소 할당
         ResetVariables(); // 변수를 기본값으로 초기화
-        UpdateText();
+        UpdateScene();
     }
 
     // 변수 초기화 메서드
@@ -64,7 +74,12 @@ public class TurnCounting : MonoBehaviour
         level = 1;
         limitTurn = firstLimitTurn;
         goalScore = firstGoalScore;
+        turnScore = 0;
         increaseMultiplier = 2;
+        breakTurn = 0;
+        bossTrigger = 0;
+        lastbossTrigger = 0;
+        monsterManager = GameObject.Find("MonsterManager");
     }
 
     private void AssignUIElements()
@@ -73,13 +88,13 @@ public class TurnCounting : MonoBehaviour
         goalScoreText = GameObject.Find("GoalText")?.GetComponent<TextMeshProUGUI>();
     }
 
-    public void CheckTrunAndGoal()
+    public void CheckTurnAndGoal()
     {
-        UpdateText();
-
+        UpdateScene();
+        
         if (turnCount >= limitTurn)
         {
-            if(BoardCheck.score < goalScore)
+            if(turnScore < goalScore)
             {
                 //game over
                 BoardCheck.gameover = true;
@@ -87,8 +102,11 @@ public class TurnCounting : MonoBehaviour
             else
             {
                 //갱신
-                limitTurn += firstLimitTurn;
-                goalScore += firstGoalScore * increaseMultiplier;
+                limitTurn += 2;
+                turnCount = 0;
+                goalScore = firstGoalScore * increaseMultiplier;
+                turnScore = 0;
+                breakTurn = Random.Range(3, 7);
                 if (increaseMultiplier < 30)
                 {
                     increaseMultiplier += 1;
@@ -98,13 +116,21 @@ public class TurnCounting : MonoBehaviour
                 level++;
                 SoundManager.Instance.PlayLevelUpSound();
             }
+
+            if (monsterManager.GetComponent<MonsterSpawner>().CheckNextMonster() == 1 || (monsterManager.GetComponent<MonsterSpawner>().CheckNextMonster() == 3 && monsterManager.GetComponent<MonsterSpawner>().buckShotMode == 1))
+            {
+                limitTurn *= 2;
+                goalScore *= 10;
+            }
         }
     }
 
     //텍스트 갱신
-    private void UpdateText()
+    public void UpdateScene()
     {
+        monsterManager.GetComponent<MonsterSpawner>().UpdateMonster();
         limitTurnText.text = "Turn : " + turnCount + " / " + limitTurn;
         goalScoreText.text = "Goal : " + goalScore;
+
     }
 }
