@@ -177,7 +177,7 @@ public class BoardCheck : MonoBehaviour
             }
         }
 
-        if(monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 2 &&  (len == 1 || len == 2))
+        if((monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 2 || (monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 3 && monsterManager.GetComponent<MonsterSpawner>().buckShotMode == 2)) &&  (len == 1 || len == 2))
         {
             TurnCounting.Instance.turnCount += TurnCounting.Instance.limitTurn / 3;
         }

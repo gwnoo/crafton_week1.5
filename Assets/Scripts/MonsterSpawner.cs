@@ -4,14 +4,14 @@ public class MonsterSpawner : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] monster;
-    private int monsterType;
-    private int level;
     [SerializeField]
     private GameObject bossHpBar;
     [SerializeField]
     private GameObject hpBar;
+    [SerializeField]
     private int aliveMonster = -1;
     private int nextMonster = 0;
+    public int buckShotMode = 1;
 
     
 
@@ -46,15 +46,12 @@ public class MonsterSpawner : MonoBehaviour
         }
         aliveMonster = -1;
         nextMonster = Random.Range(0, 4);
+        buckShotMode = Random.Range(1, 3);
     }
 
     public void SpawnMonsterByLevel()
     {
         SpawnMonster(nextMonster);
-        if (aliveMonster == 3)
-        {
-            aliveMonster = Random.Range(0, 3);
-        }
         aliveMonster = nextMonster;
     }
 

@@ -27,7 +27,7 @@ public class TileGenerator : MonoBehaviour
     private void Start()
     {
         RerollToggle.onValueChanged.AddListener(Reroll);
-        RerollCount = 3;
+        RerollCount = 30000000;
         tileCount = 3;
         TileGenerate(InventorySlot1);
         TileGenerate(InventorySlot2);

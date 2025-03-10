@@ -98,11 +98,11 @@ public class TurnCounting : MonoBehaviour
             else
             {
                 //°»½Å
-                limitTurn += 5;
+                limitTurn += 2;
                 turnCount = 0;
                 goalScore = firstGoalScore * increaseMultiplier;
                 turnScore = 0;
-                breakTurn = 5;
+                breakTurn = Random.Range(2, 7);
                 if (increaseMultiplier < 30)
                 {
                     increaseMultiplier += 1;
@@ -113,7 +113,7 @@ public class TurnCounting : MonoBehaviour
                 SoundManager.Instance.PlayLevelUpSound();
             }
 
-            if (monsterManager.GetComponent<MonsterSpawner>().CheckNextMonster() == 1)
+            if (monsterManager.GetComponent<MonsterSpawner>().CheckNextMonster() == 1 || (monsterManager.GetComponent<MonsterSpawner>().CheckNextMonster() == 3 && monsterManager.GetComponent<MonsterSpawner>().buckShotMode == 1))
             {
                 limitTurn *= 2;
                 goalScore *= 10;

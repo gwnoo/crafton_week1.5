@@ -12,7 +12,7 @@ public class BoardSlot : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
     private GameObject slot2;
     private GameObject slot3;
     private GameObject tileGenerator;
-    public int tileType;
+    private GameObject monsterManager;
 
     private void Awake()
     {
@@ -22,6 +22,7 @@ public class BoardSlot : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
         slot2 = GameObject.Find("OfferSlot2");
         slot3 = GameObject.Find("OfferSlot3");
         tileGenerator = GameObject.Find("TileGenerator");
+        monsterManager = GameObject.Find("MonsterManager");
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -59,7 +60,22 @@ public class BoardSlot : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        image.color = Color.yellow;
+        if(eventData.pointerDrag != null)
+        {
+            int type = eventData.pointerDrag.GetComponent<TileDraggable>().tileType;
+            if ((monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 2 || (monsterManager.GetComponent<MonsterSpawner>().CheckMonster() == 3 && monsterManager.GetComponent<MonsterSpawner>().buckShotMode == 2)) && ((idx == 0 && type == 9) || (idx == 4 && type == 3) || (idx == 20 && type == 12) || (idx == 24 && type == 6)))
+            {
+                image.color = Color.red;
+            }
+            else
+            {
+                image.color = Color.yellow;
+            }
+        }
+        else
+        {
+            image.color = Color.yellow;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
